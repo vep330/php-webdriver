@@ -14,7 +14,7 @@ class ChromeDriver extends RemoteWebDriver
     /**
      * @return static
      */
-    public static function start(DesiredCapabilities $desired_capabilities = null, ChromeDriverService $service = null)
+    public static function start(DesiredCapabilities $desired_capabilities = null, ChromeDriverService $service = null, $connection_timeout_in_ms = null, $request_timeout_in_ms = null)
     {
         if ($desired_capabilities === null) {
             $desired_capabilities = DesiredCapabilities::chrome();
@@ -23,6 +23,12 @@ class ChromeDriver extends RemoteWebDriver
             $service = ChromeDriverService::createDefaultService();
         }
         $executor = new DriverCommandExecutor($service);
+        if ($connection_timeout_in_ms !== null) {
+            $executor->setConnectionTimeout($connection_timeout_in_ms);
+        }
+        if ($request_timeout_in_ms !== null) {
+            $executor->setRequestTimeout($request_timeout_in_ms);
+        }
         $driver = new static($executor, null, $desired_capabilities);
         $driver->startSession($desired_capabilities);
 
